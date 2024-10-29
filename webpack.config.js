@@ -27,6 +27,10 @@ const config = {
 				use: {
 					loader: 'swc-loader'
 				}
+			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader']
 			}
 		]
 	},
