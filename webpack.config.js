@@ -2,11 +2,11 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const config = {
-	// Production 빌드 시, 리액트 코드 트랜스파일링 할 시작점 설정.
+	// 빌드 시, 리액트 코드 트랜스파일링 할 시작점 설정.
 	entry: './src/index.tsx',
 	output: {
 		path: path.join(path.resolve(), '/dist'),
-		filename: 'index_bundle.js'
+		filename: 'bundle.js'
 	},
 
 	// webpack Develop 모드 실행 시, 사용될 static 파일들 경로와 관리 방식 설정.
@@ -18,9 +18,9 @@ const config = {
 		port: 3000
 	},
 
-	// swc 연동을 위한 swc-loader 장착.
 	module: {
 		rules: [
+			// swc 연동을 위한 swc-loader 설정
 			{
 				test: /\.tsx?$/,
 				exclude: /(node_modules)/,
@@ -28,9 +28,24 @@ const config = {
 					loader: 'swc-loader'
 				}
 			},
+			// 일반 CSS 파일
 			{
-				test: /\.css$/i,
+				test: /\.css$/,
+				exclude: /\.module\.css$/,
 				use: ['style-loader', 'css-loader']
+			},
+			// CSS Modules
+			{
+				test: /\.module\.css$/,
+				use: [
+					'style-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							modules: true
+						}
+					}
+				]
 			}
 		]
 	},
