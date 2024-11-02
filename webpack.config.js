@@ -6,7 +6,8 @@ const config = {
 	entry: './src/index.tsx',
 	output: {
 		path: path.join(path.resolve(), '/dist'),
-		filename: 'bundle.js'
+		filename: 'bundle.js',
+		assetModuleFilename: 'images/[hash][ext][query]' // 생성된 파일 경로 지정
 	},
 
 	// webpack Develop 모드 실행 시, 사용될 static 파일들 경로와 관리 방식 설정.
@@ -46,8 +47,17 @@ const config = {
 								namedExport: false
 							}
 						}
+					}]
+				},
+			// 이미지
+			{
+				test: /\.(png|jpe?g|gif|webp|svg)$/i,
+				type: 'asset', // 기본은 자동 결정, asset/resource와 asset/inline 혼합
+				parser: {
+					dataUrlCondition: {
+						maxSize: 8192 // 8KB 이하인 파일은 인라인, 초과는 파일로 생성
 					}
-				]
+				}
 			}
 		]
 	},
@@ -62,6 +72,9 @@ const config = {
 
 	// 파일 확장자 해석 설정
 	resolve: {
+		alias: {
+			'@': path.join(path.resolve(), 'src')
+		},
 		extensions: ['.tsx', '.ts', '.js', '.jsx']
 	}
 };
