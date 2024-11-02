@@ -1,0 +1,6 @@
+:root {
+    --app-header-height: 60px;
+}
+#root {
+    width: 100vw;
+}
