@@ -1,5 +1,7 @@
-import styles from './app.module.css';
+import './css/reset.css';
+import './css/style.css';
+import Layout from '@/components/layout/Layout';
 
 export default function App() {
-	return <div className={styles.app}>Hello!</div>;
+	return <Layout />;
 }
