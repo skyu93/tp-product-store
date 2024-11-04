@@ -1,0 +1,69 @@
+.card {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.card:hover {
+    cursor: pointer;
+    .name {
+        color: rgba(51, 51, 51, 0.48);
+    }
+    .thumbnail {
+        transform: scale(1.2);
+    }
+}
+
+.thumbnail {
+    border-radius: 10px;
+    width: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    position: relative;
+    transition: transform 0.3s ease; /* 부드러운 확대 효과 */
+}
+.info {
+    padding: 16px 8px;
+}
+.name {
+    font-size: 1rem;
+    margin: 8px 0;
+    color: #333;
+}
+
+.price-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000000;
+    margin-right: 8px;
+}
+
+.discount-rate {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff5a5f;
+    margin-right: 4px;
+}
+.icon {
+    width: 16px;
+    height: 16px;
+}
+
+.review-container {
+    margin-top: 5px;
+    display: flex;
+}
+.rating {
+    font-weight: bold;
+    color: #000000;
+    margin-right: 8px;
+}
+.review-count {
+    color: #9ca3af;
+}
+
