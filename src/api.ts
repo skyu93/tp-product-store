@@ -8,9 +8,9 @@ export const fetchProducts = async (
 	}>
 ): Promise<PaginatedProductsResponse | null> => {
 	try {
-		const { limit = 20, page = 0 } = props ?? {};
+		const { limit = 30, page = 0 } = props ?? {};
 		const res = await fetch(
-			`${API_ENDPOINTS.PRODUCT}?limit=${limit}&skip=${page}`
+			`${API_ENDPOINTS.PRODUCT}?limit=${limit}&skip=${limit * page}`
 		);
 		return res.json();
 	} catch (error) {
