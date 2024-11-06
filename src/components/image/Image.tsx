@@ -6,13 +6,15 @@ export default function Image({
 	width,
 	height,
 	src,
-	alt
+	alt,
+	onLoadSuccess
 }: {
 	className?: string;
 	width?: number;
 	height?: number;
 	src: string;
 	alt: string;
+	onLoadSuccess: () => void;
 }) {
 	const [isLoadError, setIsLoadError] = useState(false);
 
@@ -23,6 +25,7 @@ export default function Image({
 			width={width}
 			height={height}
 			src={isLoadError || !src ? NoImg : src}
+			onLoad={onLoadSuccess}
 			onError={() => {
 				setIsLoadError(true);
 			}}
