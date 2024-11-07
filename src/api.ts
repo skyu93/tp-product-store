@@ -1,5 +1,5 @@
-import { PaginatedProductsResponse } from '@/types/product';
-import { API_ENDPOINTS } from '@/config/api';
+import { PaginatedProductsResponse } from '@/@types/product.type';
+import { API_ENDPOINTS } from '@/config/api.config';
 
 export const fetchProducts = async (
 	props?: Partial<{

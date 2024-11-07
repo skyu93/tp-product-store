@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { SearchContext } from '@/provider/context';
-import Header from '@/components/layout/header/Header';
+import Header from '@/components/header/Header';
 import styles from './Layout.module.css';
 
 export default function Layout() {
