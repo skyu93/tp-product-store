@@ -5,7 +5,7 @@
       "tsx": true
     },
     "transform": {
-      "react":{
+      "react": {
         "runtime": "automatic"
       }
     }
