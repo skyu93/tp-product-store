@@ -3,11 +3,15 @@ import searchIcon from '@/assets/icon/search.svg';
 import cartIcon from '@/assets/icon/cart.svg';
 import { ChangeEvent } from 'react';
 
-export default function Header({
-	onInputSearch
-}: {
-	onInputSearch: (text: string) => void;
-}) {
+type Props = {
+	onInputSearch(text: string): void;
+};
+
+export default function Header({ onInputSearch }: Props) {
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { value } = event.target;
+		onInputSearch(value);
+	};
 	return (
 		<header className={styles.headerWrapper}>
 			<div className={styles.searchContainer}>
@@ -15,10 +19,7 @@ export default function Header({
 					className={styles.searchInput}
 					type="text"
 					placeholder="검색어를 입력하세요"
-					onInput={(event: ChangeEvent<HTMLInputElement>) => {
-						const { value } = event.target;
-						onInputSearch(value);
-					}}
+					onInput={handleInputChange}
 				/>
 				<img
 					className={styles.searchIcon}

@@ -1,14 +1,14 @@
 export type ProductCategory = string;
 
-export interface ProductReview {
+export type ProductReview = {
 	rating: number;
 	comment: string;
 	date: string;
 	reviewerName: string;
 	reviewerEmail: string;
-}
+};
 
-export interface Product {
+export type Product = {
 	id: string;
 	images: string[];
 	stock: number;
@@ -21,11 +21,11 @@ export interface Product {
 	price: number;
 	discountPercentage: number;
 	reviews: ProductReview[];
-}
+};
 
-export interface PaginatedProductsResponse {
+export type PaginatedProductsResponse = {
 	limit: number;
 	skip: number;
 	total: number;
 	products: Product[];
-}
+};

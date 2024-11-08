@@ -1,11 +1,12 @@
 import { PaginatedProductsResponse } from '@/@types/product.type';
 import { API_ENDPOINTS } from '@/config/api.config';
 
+type Pagination = {
+	limit: number;
+	page: number;
+};
 export const fetchProducts = async (
-	props?: Partial<{
-		limit: number;
-		page: number;
-	}>
+	props?: Partial<Pagination>
 ): Promise<PaginatedProductsResponse | null> => {
 	try {
 		const { limit = 20, page = 0 } = props ?? {};
