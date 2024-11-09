@@ -1,70 +1,59 @@
-import { CSSProperties, ReactNode, useEffect, useRef } from 'react';
+import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
 import styles from './VirtualizedList.module.css';
-import useVirtualizedList from '@/hooks/virtualizedList';
+import useVirtualizedList from '@/hooks/useVirtualizedList';
 
-export default function VirtualizedList<T>({
-	items,
-	itemWidth,
-	itemHeight,
-	onIntersect,
-	renderItem
-}: {
-	items: T[];
-	itemWidth: number;
-	itemHeight: number;
-	onIntersect: () => void;
-	renderItem: (item: T, index?: number) => ReactNode; // 렌더링 함수
-}) {
-	const targetRef = useRef<HTMLDivElement>(null);
-	const observerRef = useRef<IntersectionObserver | null>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
-	const { startIndex, endIndex, rowCount } = useVirtualizedList(
-		containerRef.current?.getBoundingClientRect().width ?? 0,
-		itemWidth,
-		itemHeight
-	);
-	console.log('teo', containerRef.current?.classList);
+type Props<T> = {
+  items: T[];
+  itemWidth: number;
+  itemHeight: number;
+  onIntersect: () => void;
+  renderComponent: (item: T, index?: number) => ReactNode; // 렌더링 함수
+};
+export default function VirtualizedList<T>({ items, itemWidth, itemHeight, onIntersect, renderComponent }: Props<T>) {
+  const targetIntersectRef = useRef<HTMLDivElement>(null);
+  const visibleItemContainerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const { startIndex, columnCount, rowCount } = useVirtualizedList(visibleItemContainerRef, itemWidth, itemHeight);
 
-	const cssStyle: CSSProperties = {
-		paddingTop: `${startIndex * itemHeight}px`,
-		paddingBottom: `${itemHeight * 2}px` // 여윳 공간
-	};
-	const visibleItems = items.slice(startIndex * rowCount, endIndex);
+  const viewportStyle: CSSProperties = {
+    paddingTop: `${startIndex * itemHeight}px`,
+    paddingBottom: `${itemHeight * 2}px`, // 여윳 공간
+  };
+  const visibleItems = useMemo(() => {
+    return items.slice(startIndex * columnCount, startIndex * columnCount + columnCount * rowCount);
+  }, [startIndex, columnCount, rowCount]);
 
-	useEffect(() => {
-		observerRef.current = new IntersectionObserver(
-			entries => {
-				const [entry] = entries;
-				if (entry.isIntersecting) {
-					onIntersect();
-				}
-			},
-			{
-				root: null,
-				rootMargin: `0px 0px ${itemHeight * 2}px 0px`
-			}
-		);
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          onIntersect();
+        }
+      },
+      {
+        rootMargin: `0px 0px ${viewportStyle.paddingBottom} 0px`,
+      },
+    );
 
-		if (targetRef.current) {
-			observerRef.current.observe(targetRef.current);
-		}
+    if (targetIntersectRef.current) {
+      observerRef.current.observe(targetIntersectRef.current);
+    }
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [onIntersect, observerRef, targetIntersectRef, visibleItems]);
 
-		return () => {
-			observerRef.current?.disconnect();
-		};
-	}, [itemHeight, targetRef]);
-
-	return (
-		<div className={styles.virtualizedList}>
-			<div className={styles.viewport} style={cssStyle}>
-				<div ref={containerRef} className={styles.itemContainer}>
-					{visibleItems.map((item, index) => {
-						return renderItem(item, index);
-					})}
-				</div>
-
-				<div ref={targetRef} className={styles.intersectionTarget} />
-			</div>
-		</div>
-	);
+  return (
+    <div className={styles.virtualizedList}>
+      <div className={styles.viewport} style={viewportStyle}>
+        <div ref={visibleItemContainerRef} className={styles.itemContainer}>
+          {visibleItems.map((item, index) => {
+            return renderComponent(item, index);
+          })}
+        </div>
+      </div>
+      <div ref={targetIntersectRef} className={styles.intersectionTarget} />
+    </div>
+  );
 }
