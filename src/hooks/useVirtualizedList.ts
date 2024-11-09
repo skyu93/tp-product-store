@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 
 export default function useVirtualizedList(
   containerRef: RefObject<HTMLDivElement>,
@@ -34,13 +34,17 @@ export default function useVirtualizedList(
     };
   }, [containerRef]);
 
-  const columnCount = Math.floor(containerWidth / itemWidth);
-  const startIndex = Math.floor(scrollTop / itemHeight);
-  const rowCount = Math.ceil(viewportHeight / itemHeight);
+  const calc = useCallback(() => {
+    const columnCount = Math.floor(containerWidth / itemWidth);
+    const startIndex = Math.floor(scrollTop / itemHeight);
+    const rowCount = Math.ceil(viewportHeight / itemHeight);
 
-  return {
-    startIndex,
-    columnCount,
-    rowCount,
-  };
+    return {
+      startIndex,
+      columnCount,
+      rowCount,
+    };
+  }, [containerWidth, viewportHeight, scrollTop, itemWidth, itemHeight]);
+
+  return calc();
 }

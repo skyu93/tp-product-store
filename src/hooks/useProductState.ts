@@ -11,7 +11,6 @@ export default function useProductState() {
   const isLoading = useRef(false);
 
   const getProducts = async (pageNum: number) => {
-    console.log('teo getProducts', productsLength.current, maxProductCount.current);
     if (productsLength.current >= maxProductCount.current) return;
     isLoading.current = true;
 
