@@ -7,8 +7,8 @@ type Pagination = {
 };
 export const fetchProducts = async (props?: Partial<Pagination>): Promise<PaginatedProductsResponse | null> => {
   try {
-    const { limit = 20, page = 0 } = props ?? {};
-    const res = await fetch(`${API_ENDPOINTS.PRODUCT}?limit=${limit}&skip=${page}`);
+    const { limit = 30, page = 0 } = props ?? {};
+    const res = await fetch(`${API_ENDPOINTS.PRODUCT}?limit=${limit}&skip=${page * limit}`);
     return res.json();
   } catch (error) {
     console.error(error);

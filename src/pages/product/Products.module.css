@@ -1,0 +1,28 @@
+.products-container {
+    display: grid;
+    width: 100%;
+    gap: 16px;
+}
+.no-products {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+@media screen and (min-width: 1230px) {
+    .products-container {
+        grid-template-columns: repeat(4, 1fr); /* 4개 컬럼 */
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1229px) {
+    .products-container {
+        grid-template-columns: repeat(3, 1fr); /* 3개 컬럼 */
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .products-container {
+        grid-template-columns: repeat(2, 1fr); /* 2개 컬럼 */
+    }
+}
