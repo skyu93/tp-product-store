@@ -17,7 +17,7 @@ export const fetchProducts = async (props?: Partial<Pagination>): Promise<Pagina
 };
 export const fetchProductById = async (productId: string) => {
   try {
-    const res = await fetch(`${API_ENDPOINTS.PRODUCT}?${productId}`);
+    const res = await fetch(`${API_ENDPOINTS.PRODUCT}/${productId}`);
     return res.json();
   } catch (error) {
     console.error(error);
