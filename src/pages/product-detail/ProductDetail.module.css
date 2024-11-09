@@ -1,0 +1,93 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    line-height: 1.2;
+}
+
+.detail-wrap {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.image {
+    max-width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.no-image {
+    border-radius: 10px;
+    width: 100%;
+}
+
+.info {
+    width: 100%;
+    padding-left: 20px;
+}
+.category {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 15px;
+    background-color: #ffeace;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.brand {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.discount {
+    color: red;
+    font-size: 16px;
+    margin-left: 8px;
+}
+
+.ratingStock {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rating {
+    font-size: 16px;
+}
+.rating img {
+    width: 14px;
+}
+
+.stock {
+    font-size: 14px;
+    color: #888;
+}
+
+.cartButton {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: rgba(255, 155, 124, 0.3);
+    transition: background-color 0.3s ease;
+}
+.cartButton:hover {
+    background-color: rgb(255, 155, 124);
+}
