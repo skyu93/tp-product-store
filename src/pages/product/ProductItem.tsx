@@ -3,6 +3,15 @@ import styles from './ProductItem.module.css';
 import starIcon from '@/assets/icon/star.svg';
 import { useCallback, useState } from 'react';
 
+type Props = {
+  image: string;
+  name: string;
+  price: number;
+  rating: number;
+  discountRate: number;
+  reviewCount: number;
+  onClick: () => void;
+};
 export default function ProductItem({
   image,
   name = '',
@@ -10,21 +19,15 @@ export default function ProductItem({
   rating = 0,
   discountRate = 0,
   reviewCount = 0,
-}: {
-  image: string;
-  name: string;
-  price: number;
-  rating: number;
-  discountRate: number;
-  reviewCount: number;
-}) {
+  onClick,
+}: Props) {
   const [isImageLoading, setImageLoading] = useState(true);
   const onLoadSuccess = useCallback(() => {
     setImageLoading(false);
   }, []);
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onClick}>
       <Image
         className={isImageLoading ? styles.noImage : styles.thumbnail}
         src={image}

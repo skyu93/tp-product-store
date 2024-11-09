@@ -4,8 +4,19 @@ import styles from './Products.module.css';
 import VirtualizedList from '@/components/virtualized-list/VirtualizedList';
 import useProductState from '@/hooks/useProductState';
 import { Product } from '@/@types/product.type';
+import { useNavigate } from 'react-router-dom';
 
-const ProductComponent = ({ id, thumbnail, title, price, rating, discountPercentage, reviews }: Product) => {
+type ProductProps = Product & { onClick: () => void };
+const ProductComponent = ({
+  id,
+  thumbnail,
+  title,
+  price,
+  rating,
+  discountPercentage,
+  reviews,
+  onClick,
+}: ProductProps) => {
   return (
     <ProductItem
       key={id}
@@ -15,6 +26,7 @@ const ProductComponent = ({ id, thumbnail, title, price, rating, discountPercent
       rating={rating}
       reviewCount={reviews.length}
       discountRate={discountPercentage}
+      onClick={onClick}
     />
   );
 };
@@ -23,11 +35,19 @@ export default function Products() {
   const { products, isEmpty, nextPage } = useProductState();
   const virtualizedListRef = useRef<HTMLDivElement>(null);
   const [itemWidth, setItemWidth] = useState(300);
+  const navigate = useNavigate();
+
+  const onIntersect = useCallback(nextPage, []);
+  const product = useCallback((item: Product) => {
+    const goToProductDetail = () => navigate(`/products/${item.id}`);
+
+    return ProductComponent({
+      ...item,
+      onClick: goToProductDetail,
+    });
+  }, []);
 
   useEffect(nextPage, []);
-  const onIntersect = useCallback(nextPage, []);
-  const product = useCallback(ProductComponent, []);
-
   useEffect(() => {
     if (!virtualizedListRef.current) return;
 
