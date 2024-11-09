@@ -1,0 +1,32 @@
+.virtualized-list {
+  height: 100%;
+}
+.viewport {
+  width: 100%;
+}
+.intersection-target {
+  height: 1px;
+}
+
+.item-container {
+  display: grid;
+  width: 100%;
+  gap: 16px;
+}
+@media screen and (min-width: 1230px) {
+  .item-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1229px) {
+  .item-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .item-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
