@@ -39,7 +39,7 @@ export default function Products() {
 
   const onIntersect = useCallback(nextPage, []);
   const product = useCallback((item: Product) => {
-    const goToProductDetail = () => navigate(`/products/${item.id}`);
+    const goToProductDetail = () => navigate(`/product/${item.id}`);
 
     return ProductComponent({
       ...item,
@@ -47,7 +47,6 @@ export default function Products() {
     });
   }, []);
 
-  useEffect(nextPage, []);
   useEffect(() => {
     if (!virtualizedListRef.current) return;
 
@@ -73,6 +72,7 @@ export default function Products() {
     };
   }, [virtualizedListRef, products]);
 
+  // Q. 현 구조에서 Suspense를 사용할 수 있는 방법
   return (
     <>
       {isEmpty ? (

@@ -1,6 +1,6 @@
 import { Product } from '@/@types/product.type';
 import { fetchProducts } from '@/api';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isNill } from '@/utility/typeGuard';
 
 export default function useProductState() {
@@ -22,7 +22,8 @@ export default function useProductState() {
     page.current = pageNum;
     maxProductCount.current = res?.total ?? 0;
 
-    //Q. products useState값을 사용해서 해결할 수 없을까...?
+    //Q. products state가 변하지 않는 이유
+    // setProducts([...products, ...res.products]) 코드가
     setProducts((prevProducts) => {
       const newProducts = [...prevProducts, ...res.products];
       productsLength.current = newProducts.length;
@@ -41,6 +42,8 @@ export default function useProductState() {
   const prevPage = () => {
     setPage(page.current - 1);
   };
+
+  useEffect(nextPage, []);
 
   return {
     products,

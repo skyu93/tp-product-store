@@ -1,0 +1,37 @@
+.wrapper {
+    font-size: 3rem;
+    width: 100%;
+    height: calc(100vh - var(--app-header-height));
+    display: flex;
+    align-items: center;
+}
+
+.content-wrapper {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.error-icon {
+    width: 3rem;
+    height: 3rem;
+}
+
+.home-btn {
+    min-width: 200px;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgba(var(--brand-color-rgb), 0.6);
+    transition: background-color 0.3s ease;
+    text-decoration-line: none;
+    text-align: center;
+    color: inherit;
+}
+.home-btn:hover {
+    background-color: var(--brand-color);
+}
