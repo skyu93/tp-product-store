@@ -127,3 +127,8 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+button {
+  all: unset; /* 기본 스타일 제거 */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}

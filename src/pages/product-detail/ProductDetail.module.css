@@ -77,17 +77,15 @@
     color: #888;
 }
 
-.cartButton {
+.cart-btn {
     width: 100%;
     padding: 12px 20px;
     font-size: 16px;
+    text-align: center;
     font-weight: bold;
     border-radius: 5px;
-    border: none;
-    cursor: pointer;
     background-color: rgba(255, 155, 124, 0.3);
-    transition: background-color 0.3s ease;
 }
-.cartButton:hover {
+.cart-btn:hover {
     background-color: rgb(255, 155, 124);
 }
