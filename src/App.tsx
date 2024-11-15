@@ -7,6 +7,7 @@ import Products from '@/pages/product/Products';
 import ProductDetail from '@/pages/product-detail/ProductDetail';
 import ErrorPage from '@/pages/error/ErrorPage';
 import NotFound from '@/pages/error/NotFound';
+import Cart from '@/pages/cart/Cart';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
           </Route>
           <Route path="/error" element={<ErrorPage />} />
           <Route path="*" element={<NotFound />} />

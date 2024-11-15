@@ -1,15 +1,17 @@
 import styles from './ProductDetail.module.css';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { fetchProductById } from '@/api';
 import { isNill } from '@/utility/typeGuard';
 import { Product } from '@/@types/product.type';
 import Image from '@/components/image/Image';
 import starIcon from '@/assets/icon/star.svg';
+import { CartContext } from '@/provider/context';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
+  const { addProductToCart } = useContext(CartContext);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -20,11 +22,11 @@ export default function ProductDetail() {
     };
     getProduct();
   }, [id]);
-
-  if (isNill(product)) return <div>스켈레톤 UI</div>;
+  if (isNill(product)) {
+    return <div style={{ margin: '10px' }}>로딩중...</div>;
+  }
 
   const { title, price, discountPercentage, category, rating, stock, brand, thumbnail } = product;
-
   return (
     <div className={styles.container}>
       <div className={styles.detailWrap}>
@@ -32,7 +34,7 @@ export default function ProductDetail() {
         <div className={styles.info}>
           <span className={styles.category}>{category}</span>
           <h1 className={styles.title}>{title}</h1>
-          <p className={styles.brand}>by {brand}</p>
+          {brand && <p className={styles.brand}>by {brand}</p>}
           <p className={styles.price}>
             ${price} <span className={styles.discount}>({discountPercentage}% OFF)</span>
           </p>
@@ -44,7 +46,9 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-      <button className={styles.cartButton}>Add Cart</button>
+      <button className={styles.cartBtn} onClick={() => addProductToCart(product)}>
+        장바구니 추가
+      </button>
     </div>
   );
 }

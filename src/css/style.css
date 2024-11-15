@@ -1,7 +1,7 @@
 :root {
   --app-header-height: 60px;
   --brand-color: #FF7E28;
-    --brand-color-rgb: 255, 126, 40;
+  --brand-color-rgb: 255, 126, 40;
 }
 #root {
   width: 100vw;

@@ -1,14 +1,17 @@
+header{
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #dcd7d7;
+}
 .header-wrapper {
+  height: var(--app-header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
-  width: 100%;
-  height: var(--app-header-height);
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid rgb(234, 237, 239);
+  padding: 0 20px
 }
 
 .search-container {
@@ -17,19 +20,16 @@
   max-width: 60%;
   margin: 0 16px;
 }
-
 .search-input {
   width: 100%;
   padding: 0.5rem 1rem 0.5rem 2.5rem;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
 }
-
 .search-input:focus {
   outline: none;
   border-color: #ffb02d;
 }
-
 .search-icon {
   position: absolute;
   left: 0.75rem;
@@ -40,24 +40,34 @@
   color: #9ca3af;
 }
 
-.icons-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 0 18px;
+.icon {
+  width: 32px;
+  height: 32px;
 }
-.icons-container button {
-  padding: 0.5rem;
-  border: none;
-  background: transparent;
+.cart-btn {
+  position: relative;
   border-radius: 50%;
-  cursor: pointer;
 }
-.icons-container button:hover {
+.back-btn {
+  border-radius: 50%;
+}
+.cart-btn:hover, .back-btn:hover {
   background-color: rgba(255, 176, 45, 0.28);
 }
-.icon {
-  width: 24px;
-  height: 24px;
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  min-width: 16px;
+  height: 20px;
+  padding: 0 2px;
+  border-radius: 10px;
+  background-color: #dc3545; /* 빨간색 배경 */
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
