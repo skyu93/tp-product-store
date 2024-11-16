@@ -2,24 +2,25 @@ import Image from '@/components/image/Image';
 import styles from './ProductItem.module.css';
 import starIcon from '@/assets/icon/star.svg';
 import { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 type Props = {
+  id: string;
   image: string;
   name: string;
   price: number;
   rating: number;
   discountRate: number;
   reviewCount: number;
-  onClick: () => void;
 };
 export default function ProductItem({
+  id,
   image,
   name = '',
   price = 0,
   rating = 0,
   discountRate = 0,
   reviewCount = 0,
-  onClick,
 }: Props) {
   const [isImageLoading, setImageLoading] = useState(true);
   const onLoadSuccess = useCallback(() => {
@@ -27,7 +28,7 @@ export default function ProductItem({
   }, []);
 
   return (
-    <div className={styles.card} onClick={onClick}>
+    <Link to={`/product/${id}`} className={styles.card}>
       <Image
         className={isImageLoading ? styles.noImage : styles.thumbnail}
         src={image}
@@ -48,6 +49,6 @@ export default function ProductItem({
           </div>
         </div>
       )}
-    </div>
+    </Link>
   );
 }

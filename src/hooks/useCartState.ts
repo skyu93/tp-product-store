@@ -11,7 +11,9 @@ export default function useCartState() {
   };
 
   const addProductToCart = (product: Product) => {
-    if (hasProduct(product)) return;
+    if (hasProduct(product)) {
+      return;
+    }
 
     const newCartProduct: CartProduct = {
       id: product.id,

@@ -22,8 +22,6 @@ export default function useProductState() {
     page.current = pageNum;
     maxProductCount.current = res?.total ?? 0;
 
-    //Q. products state가 변하지 않는 이유
-    // setProducts([...products, ...res.products]) 코드가
     setProducts((prevProducts) => {
       const newProducts = [...prevProducts, ...res.products];
       productsLength.current = newProducts.length;

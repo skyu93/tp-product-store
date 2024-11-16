@@ -3,9 +3,11 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    cursor: pointer;
+    text-decoration-line: none;
+    color: inherit;
 }
 .card:hover {
-    cursor: pointer;
     .name {
         color: rgba(51, 51, 51, 0.48);
     }

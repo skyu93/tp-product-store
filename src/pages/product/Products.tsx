@@ -4,61 +4,21 @@ import styles from './Products.module.css';
 import VirtualizedList from '@/components/virtualized-list/VirtualizedList';
 import useProductState from '@/hooks/useProductState';
 import { Product } from '@/@types/product.type';
-import { useNavigate } from 'react-router-dom';
-
-type ProductProps = Product & { onClick: () => void };
-const ProductComponent = ({
-  id,
-  thumbnail,
-  title,
-  price,
-  rating,
-  discountPercentage,
-  reviews,
-  onClick,
-}: ProductProps) => {
-  return (
-    <ProductItem
-      key={id}
-      image={thumbnail}
-      name={title}
-      price={price}
-      rating={rating}
-      reviewCount={reviews.length}
-      discountRate={discountPercentage}
-      onClick={onClick}
-    />
-  );
-};
+import { getResponsiveColumnWidth } from '@/utility';
 
 export default function Products() {
   const { products, isEmpty, nextPage } = useProductState();
   const virtualizedListRef = useRef<HTMLDivElement>(null);
   const [itemWidth, setItemWidth] = useState(300);
-  const navigate = useNavigate();
 
   const onIntersect = useCallback(nextPage, []);
-  const product = useCallback((item: Product) => {
-    const goToProductDetail = () => navigate(`/product/${item.id}`);
-
-    return ProductComponent({
-      ...item,
-      onClick: goToProductDetail,
-    });
-  }, []);
 
   useEffect(() => {
     if (!virtualizedListRef.current) return;
 
     const updateItemWidth = () => {
       const width = virtualizedListRef.current?.offsetWidth || 0;
-      if (width >= 1200) {
-        setItemWidth(Math.trunc(width / 4));
-      } else if (width >= 768 && width <= 1119) {
-        setItemWidth(Math.trunc(width / 3));
-      } else {
-        setItemWidth(Math.trunc(width / 2));
-      }
+      setItemWidth(getResponsiveColumnWidth(width));
     };
 
     updateItemWidth();
@@ -72,19 +32,29 @@ export default function Products() {
     };
   }, [virtualizedListRef, products]);
 
-  // Q. 현 구조에서 Suspense를 사용할 수 있는 방법
   return (
     <>
-      {isEmpty ? (
-        <div className={styles.noProducts}>상품이 없습니다.</div>
-      ) : (
+      {isEmpty && <div className={styles.noProducts}>상품이 없습니다.</div>}
+      {!isEmpty && (
         <div ref={virtualizedListRef}>
           <VirtualizedList<Product>
             items={products}
             itemWidth={itemWidth}
             itemHeight={400}
             onIntersect={onIntersect}
-            renderComponent={product}
+            renderComponent={(item) => {
+              return (
+                <ProductItem
+                  id={item.id}
+                  image={item.thumbnail}
+                  name={item.title}
+                  price={item.price}
+                  rating={item.rating}
+                  discountRate={item.discountPercentage}
+                  reviewCount={item.reviews.length}
+                />
+              );
+            }}
           />
         </div>
       )}

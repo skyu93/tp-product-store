@@ -11,7 +11,9 @@ type Props = {
 };
 
 const CountBadge = ({ count }: { count: number }) => {
-  if (!count || count <= 0) return null;
+  if (!count || count <= 0) {
+    return null;
+  }
   if (count > 99) {
     return <div className={styles.badge}>99+</div>;
   }
