@@ -1,17 +1,36 @@
 import ProductItem from '@/pages/product/ProductItem';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styles from './Products.module.css';
 import VirtualizedList from '@/components/virtualized-list/VirtualizedList';
 import useProductState from '@/hooks/useProductState';
 import { Product } from '@/@types/product.type';
 import { getResponsiveColumnWidth } from '@/utility';
+import { SearchContext } from '@/provider/context';
 
 export default function Products() {
-  const { products, isEmpty, nextPage } = useProductState();
+  const { products, nextPage, setPage, searchProducts } = useProductState();
+  const { searchText } = useContext(SearchContext);
   const virtualizedListRef = useRef<HTMLDivElement>(null);
   const [itemWidth, setItemWidth] = useState(300);
+  const isProductEmpty = () => {
+    return !products || products.length <= 0;
+  };
 
-  const onIntersect = useCallback(nextPage, []);
+  const onIntersect = () => {
+    if (searchText !== '' || isProductEmpty()) {
+      return;
+    }
+    nextPage();
+  };
+  useEffect(nextPage, []);
+
+  useEffect(() => {
+    if (searchText === '') {
+      setPage(0);
+    } else {
+      searchProducts(searchText);
+    }
+  }, [searchText]);
 
   useEffect(() => {
     if (!virtualizedListRef.current) return;
@@ -34,8 +53,8 @@ export default function Products() {
 
   return (
     <>
-      {isEmpty && <div className={styles.noProducts}>상품이 없습니다.</div>}
-      {!isEmpty && (
+      {isProductEmpty() && <div className={styles.noProducts}>상품이 없습니다.</div>}
+      {!isProductEmpty() && (
         <div ref={virtualizedListRef}>
           <VirtualizedList<Product>
             items={products}
@@ -45,6 +64,7 @@ export default function Products() {
             renderComponent={(item) => {
               return (
                 <ProductItem
+                  key={item.id}
                   id={item.id}
                   image={item.thumbnail}
                   name={item.title}

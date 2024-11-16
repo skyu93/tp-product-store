@@ -11,3 +11,15 @@ export const getResponsiveColumnWidth = (width: number) => {
 
   return Math.trunc(width / 2);
 };
+
+export const debounce = <T>(callback: (data?: T) => void, time: number) => {
+  let timeout: NodeJS.Timeout | null = null;
+  return (data?: T) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      callback(data);
+    }, time);
+  };
+};

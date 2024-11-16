@@ -21,7 +21,7 @@ export default function VirtualizedList<T>({ items, itemWidth, itemHeight, onInt
   };
   const visibleItems = useMemo(() => {
     return items.slice(startIndex * columnCount, startIndex * columnCount + columnCount * rowCount);
-  }, [startIndex, columnCount, rowCount]);
+  }, [items, startIndex, columnCount, rowCount]);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(

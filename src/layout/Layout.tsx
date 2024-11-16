@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { CartContext, SearchContext } from '@/provider/context';
 import Header from '@/components/header/Header';
 import styles from './Layout.module.css';
 import useCartState from '@/hooks/useCartState';
+import { useSearchState } from '@/hooks/useSearchState';
 
 export default function Layout() {
-  const [searchText, setSearchString] = useState('');
+  const { searchText, setSearchString } = useSearchState();
   const {
     cartProducts,
     addProductToCart,
@@ -17,9 +17,6 @@ export default function Layout() {
     deselectAll,
     selectedCartProducts,
   } = useCartState();
-  const handleChangeSearchText = (text: string) => {
-    setSearchString(text);
-  };
 
   return (
     <>
@@ -35,12 +32,12 @@ export default function Layout() {
           selectedCartProducts,
         }}
       >
-        <Header onInputSearch={handleChangeSearchText} />
-        <main className={styles.wrapper}>
-          <SearchContext.Provider value={searchText}>
+        <SearchContext.Provider value={{ searchText, setSearchText: setSearchString }}>
+          <Header />
+          <main className={styles.wrapper}>
             <Outlet />
-          </SearchContext.Provider>
-        </main>
+          </main>
+        </SearchContext.Provider>
       </CartContext.Provider>
     </>
   );
