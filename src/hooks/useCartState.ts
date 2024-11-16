@@ -4,10 +4,18 @@ import { Product } from '@/@types/product.type';
 import { isNotNill } from '@/utility/typeGuard';
 
 export default function useCartState() {
-  const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
+  const [cartProducts, setCartProducts] = useState<CartProduct[]>(() => {
+    const value = localStorage.getItem('cartProducts');
+    return value ? JSON.parse(value) : [];
+  });
 
   const hasProduct = (product: Product): boolean => {
     return isNotNill(cartProducts.find((p) => p.id === product.id));
+  };
+
+  const updateCart = (newCartProducts: CartProduct[]) => {
+    localStorage.setItem('cartProducts', JSON.stringify(newCartProducts));
+    setCartProducts(newCartProducts);
   };
 
   const addProductToCart = (product: Product) => {
@@ -15,21 +23,24 @@ export default function useCartState() {
       return;
     }
 
-    const newCartProduct: CartProduct = {
-      id: product.id,
-      title: product.title,
-      thumbnail: product.thumbnail,
-      price: product.price,
-      brand: product.brand,
-      selected: false,
-    };
+    const newCartProducts: CartProduct[] = [
+      ...cartProducts,
+      {
+        id: product.id,
+        title: product.title,
+        thumbnail: product.thumbnail,
+        price: product.price,
+        brand: product.brand,
+        selected: false,
+      },
+    ];
 
-    setCartProducts([...cartProducts, newCartProduct]);
+    updateCart(newCartProducts);
   };
 
   const deleteProductFromCart = (productIds: string[]) => {
-    const newCartProducts = cartProducts.filter((p) => productIds.includes(p.id));
-    setCartProducts(newCartProducts);
+    const newCartProducts = cartProducts.filter((p) => !productIds.includes(p.id));
+    updateCart(newCartProducts);
   };
 
   const selectByProductId = (productId: string) => {
@@ -40,7 +51,7 @@ export default function useCartState() {
       return c;
     });
 
-    setCartProducts(newCartProducts);
+    updateCart(newCartProducts);
   };
 
   const deselectByProductId = (productId: string) => {
@@ -51,7 +62,7 @@ export default function useCartState() {
       return c;
     });
 
-    setCartProducts(newCartProducts);
+    updateCart(newCartProducts);
   };
 
   const selectAll = () => {
@@ -59,7 +70,7 @@ export default function useCartState() {
       c.selected = true;
       return c;
     });
-    setCartProducts(newCartProducts);
+    updateCart(newCartProducts);
   };
 
   const deselectAll = () => {
@@ -67,7 +78,7 @@ export default function useCartState() {
       c.selected = false;
       return c;
     });
-    setCartProducts(newCartProducts);
+    updateCart(newCartProducts);
   };
 
   const selectedCartProducts = useMemo(() => {
