@@ -35,9 +35,9 @@ export const fetchProductCategories = async (): Promise<string[] | null> => {
   }
 };
 
-export const fetchSearchProduct = async (queryString: string): Promise<string | null> => {
+export const fetchSearchProduct = async (queryString: string): Promise<PaginatedProductsResponse | null> => {
   try {
-    const res = await fetch(`${API_ENDPOINTS.PRODUCT}/search?q=${queryString}'`);
+    const res = await fetch(`${API_ENDPOINTS.PRODUCT}/search?q=${queryString}`);
     return res.json();
   } catch (error) {
     console.error(error);
