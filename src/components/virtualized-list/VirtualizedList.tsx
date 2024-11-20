@@ -45,7 +45,6 @@ export default function VirtualizedList<T>({
     gridTemplateColumns: `repeat(auto-fill, minmax(${itemWidth}px, 1fr))`,
   };
 
-  console.log('teo', viewportStyle);
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
