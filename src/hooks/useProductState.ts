@@ -22,7 +22,8 @@ export default function useProductState() {
     maxProductCount.current = res?.total ?? 0;
 
     setProducts((prevProducts) => {
-      const newProducts = [...prevProducts, ...res.products];
+      const ids = prevProducts.map((p) => p.id);
+      const newProducts = [...prevProducts, ...res.products.filter((p) => !ids.includes(p.id))];
       productsLength.current = newProducts.length;
       return newProducts;
     });
