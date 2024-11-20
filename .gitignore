@@ -11,3 +11,6 @@ npm-debug.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+#build
+dist
