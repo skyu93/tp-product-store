@@ -1,42 +1,55 @@
 import { RefObject, useCallback, useEffect, useState } from 'react';
 
-export default function useVirtualizedList(
-  containerRef: RefObject<HTMLDivElement>,
-  itemWidth: number,
-  itemHeight: number,
-) {
+type Props = {
+  containerRef: RefObject<HTMLDivElement>;
+  itemWidth: number;
+  itemHeight: number;
+};
+
+type VirtualizedData = {
+  startIndex: number;
+  columnCount: number;
+  rowCount: number;
+};
+
+export default function useVirtualizedList({ containerRef, itemWidth, itemHeight }: Props): VirtualizedData {
   const [scrollTop, setScrollTop] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  const updateContainerWidth = () => {
-    const width = containerRef.current?.getBoundingClientRect().width ?? 0;
+  const updateContainerWidth = useCallback(() => {
+    if (!containerRef.current) return;
+    const width = containerRef.current?.getBoundingClientRect().width;
     setContainerWidth(width);
-  };
+  }, [containerRef]);
 
-  const handleScrollEvent = () => {
-    setScrollTop(window.scrollY || document.documentElement.scrollTop);
-  };
+  const handleScrollEvent = useCallback(() => {
+    if (!containerRef.current) return;
+    const windowScrollTop = window.scrollY || document.documentElement.scrollTop;
 
-  const handleResize = () => {
+    setScrollTop(windowScrollTop);
+  }, [containerRef]);
+
+  const handleResize = useCallback(() => {
     setViewportHeight(window.innerHeight);
     updateContainerWidth();
-  };
+  }, [updateContainerWidth]);
 
   useEffect(() => {
     updateContainerWidth();
+
     window.addEventListener('scroll', handleScrollEvent);
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('scroll', handleScrollEvent);
-      window.addEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleResize);
     };
-  }, [containerRef]);
+  }, [containerRef, handleScrollEvent, handleResize, updateContainerWidth]);
 
-  const calc = useCallback(() => {
-    const columnCount = Math.floor(containerWidth / itemWidth);
-    const startIndex = Math.floor(scrollTop / itemHeight);
+  const calculate = useCallback((): VirtualizedData => {
+    const columnCount = Math.max(1, Math.floor(containerWidth / itemWidth));
+    const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight));
     const rowCount = Math.ceil(viewportHeight / itemHeight);
 
     return {
@@ -46,5 +59,5 @@ export default function useVirtualizedList(
     };
   }, [containerWidth, viewportHeight, scrollTop, itemWidth, itemHeight]);
 
-  return calc();
+  return calculate();
 }

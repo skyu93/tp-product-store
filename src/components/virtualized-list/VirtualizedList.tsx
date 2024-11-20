@@ -3,26 +3,49 @@ import styles from './VirtualizedList.module.css';
 import useVirtualizedList from '@/hooks/useVirtualizedList';
 
 type Props<T> = {
+  className: string;
   items: T[];
   itemWidth: number;
   itemHeight: number;
   onIntersect: () => void;
-  renderComponent: (item: T, index?: number) => ReactNode; // 렌더링 함수
+  itemComponent: (item: T, index?: number) => ReactNode; // 렌더링 함수
 };
-export default function VirtualizedList<T>({ items, itemWidth, itemHeight, onIntersect, renderComponent }: Props<T>) {
+const ITEM_CONTAINER_GAP = 16;
+export default function VirtualizedList<T>({
+  className,
+  items,
+  itemWidth,
+  itemHeight,
+  onIntersect,
+  itemComponent,
+}: Props<T>) {
   const targetIntersectRef = useRef<HTMLDivElement>(null);
   const visibleItemContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const { startIndex, columnCount, rowCount } = useVirtualizedList(visibleItemContainerRef, itemWidth, itemHeight);
+
+  itemWidth = itemWidth - ITEM_CONTAINER_GAP;
+  const { startIndex, columnCount, rowCount } = useVirtualizedList({
+    containerRef: visibleItemContainerRef,
+    itemWidth,
+    itemHeight,
+  });
+
+  const visibleItems = useMemo(() => {
+    const startIdx = startIndex * columnCount;
+    const endIdx = startIdx + columnCount * rowCount;
+    return items.slice(startIdx, endIdx);
+  }, [items, startIndex, columnCount, rowCount]);
 
   const viewportStyle: CSSProperties = {
     paddingTop: `${startIndex * itemHeight}px`,
-    paddingBottom: `${itemHeight * 2}px`, // 여윳 공간
+    paddingBottom: `${
+      Math.max(0, Math.ceil((items.length - (startIndex * columnCount + visibleItems.length)) / columnCount)) *
+      itemHeight
+    }px`,
+    gridTemplateColumns: `repeat(auto-fill, minmax(${itemWidth}px, 1fr))`,
   };
-  const visibleItems = useMemo(() => {
-    return items.slice(startIndex * columnCount, startIndex * columnCount + columnCount * rowCount);
-  }, [items, startIndex, columnCount, rowCount]);
 
+  console.log('teo', viewportStyle);
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -32,7 +55,7 @@ export default function VirtualizedList<T>({ items, itemWidth, itemHeight, onInt
         }
       },
       {
-        rootMargin: `0px 0px ${viewportStyle.paddingBottom} 0px`,
+        rootMargin: `0px 0px ${itemHeight * 2}px 0px`,
       },
     );
 
@@ -45,15 +68,13 @@ export default function VirtualizedList<T>({ items, itemWidth, itemHeight, onInt
   }, [onIntersect, observerRef, targetIntersectRef, visibleItems]);
 
   return (
-    <div className={styles.virtualizedList}>
-      <div className={styles.viewport} style={viewportStyle}>
-        <div ref={visibleItemContainerRef} className={styles.itemContainer}>
-          {visibleItems.map((item, index) => {
-            return renderComponent(item, index);
-          })}
-        </div>
+    <div className={`${styles.wrapper} ${className}`}>
+      <div ref={visibleItemContainerRef} style={viewportStyle} className={styles.viewport}>
+        {visibleItems.map((item, index) => {
+          return itemComponent(item, index);
+        })}
       </div>
-      <div ref={targetIntersectRef} className={styles.intersectionTarget} />
+      <div ref={targetIntersectRef} className={styles.target} />
     </div>
   );
 }

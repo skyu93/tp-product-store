@@ -1,15 +1,14 @@
-const LARGE_SCREEN_WIDTH = 1200;
-const MEDIUM_SCREEN_MIN_WIDTH = 768;
-const MEDIUM_SCREEN_MAX_WIDTH = 1119;
+const PC = 1200;
+const TABLET = 768;
+
+const getColumnsCount = (width: number): number => {
+  if (width >= PC) return 4;
+  if (width >= TABLET) return 3;
+  return 2;
+};
 
 export const getResponsiveColumnWidth = (width: number) => {
-  if (width >= LARGE_SCREEN_WIDTH) {
-    return Math.trunc(width / 4);
-  } else if (width >= MEDIUM_SCREEN_MIN_WIDTH && width <= MEDIUM_SCREEN_MAX_WIDTH) {
-    return Math.trunc(width / 3);
-  }
-
-  return Math.trunc(width / 2);
+  return Math.trunc(width / getColumnsCount(width));
 };
 
 export const debounce = <T>(callback: (data?: T) => void, time: number) => {
@@ -20,6 +19,18 @@ export const debounce = <T>(callback: (data?: T) => void, time: number) => {
     }
     timeout = setTimeout(() => {
       callback(data);
+    }, time);
+  };
+};
+
+export const throttle = <T>(callback: (data?: T) => void, time: number) => {
+  let timeout: NodeJS.Timeout | null = null;
+  return (data?: T) => {
+    if (timeout) return;
+
+    timeout = setTimeout(() => {
+      callback(data);
+      timeout = null;
     }, time);
   };
 };

@@ -4,7 +4,7 @@ import styles from './Products.module.css';
 import VirtualizedList from '@/components/virtualized-list/VirtualizedList';
 import useProductState from '@/hooks/useProductState';
 import { Product } from '@/@types/product.type';
-import { getResponsiveColumnWidth } from '@/utility';
+import { getResponsiveColumnWidth, throttle } from '@/utility';
 import { SearchContext } from '@/provider/context';
 
 export default function Products() {
@@ -16,13 +16,12 @@ export default function Products() {
     return !products || products.length <= 0;
   };
 
-  const onIntersect = () => {
+  const onIntersect = throttle(() => {
     if (searchText !== '' || isProductEmpty()) {
       return;
     }
     nextPage();
-  };
-  useEffect(nextPage, []);
+  }, 200);
 
   useEffect(() => {
     if (searchText === '') {
@@ -61,7 +60,7 @@ export default function Products() {
             itemWidth={itemWidth}
             itemHeight={400}
             onIntersect={onIntersect}
-            renderComponent={(item) => {
+            itemComponent={(item) => {
               return (
                 <ProductItem
                   key={item.id}
