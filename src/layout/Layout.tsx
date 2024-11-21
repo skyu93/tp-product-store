@@ -4,6 +4,7 @@ import Header from '@/components/header/Header';
 import styles from './Layout.module.css';
 import useCartState from '@/hooks/useCartState';
 import { useSearchState } from '@/hooks/useSearchState';
+import ModalProvider from '@/components/modal/ModalProvider';
 
 export default function Layout() {
   const { searchText, setSearchString } = useSearchState();
@@ -19,7 +20,7 @@ export default function Layout() {
   } = useCartState();
 
   return (
-    <>
+    <ModalProvider>
       <CartContext.Provider
         value={{
           cartProducts,
@@ -39,6 +40,6 @@ export default function Layout() {
           </main>
         </SearchContext.Provider>
       </CartContext.Provider>
-    </>
+    </ModalProvider>
   );
 }
