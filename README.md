@@ -95,7 +95,7 @@ pnpm install
 }
 ```
 ---
-모듈 번들러 마이그레이션 (webpack -> vite)
+### 모듈 번들러 마이그레이션 (webpack -> vite)
 - 기존 Webpack & loader 삭제
 ```
 pnpm uninstall webpack webpack-cli webpack-dev-server @swc/cli @swc/core css-loader style-loader swc-loader
