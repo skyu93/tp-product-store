@@ -3,7 +3,7 @@ import styles from './VirtualizedList.module.css';
 import useVirtualizedList from '@/hooks/useVirtualizedList';
 
 type Props<T> = {
-  className: string;
+  className?: string;
   items: T[];
   itemWidth: number;
   itemHeight: number;
