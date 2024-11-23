@@ -1,15 +1,15 @@
 import styles from './CartProduct.module.css';
 import Image from '@/components/image/Image';
 import type { CartProduct } from '@/@types/cart.type';
-import { ChangeEvent, useContext } from 'react';
-import { CartContext } from '@/provider/context';
+import { ChangeEvent } from 'react';
+import { useCartStore } from '@/store/cart';
 
 type Props = {
   product: CartProduct;
 };
 export default function CartProduct({ product }: Props) {
   const { id, title, price, brand, thumbnail, selected } = product;
-  const { selectByProductId, deselectByProductId } = useContext(CartContext);
+  const { selectByProductId, deselectByProductId } = useCartStore();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {

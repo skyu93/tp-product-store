@@ -27,10 +27,15 @@
     border-radius: 4px;
     line-height: 32px;
     color: #444;
-    background-color: rgba(156, 156, 156, 0.22);
+    background-color: rgba(var(--brand-color-rgb), 0.3);
 }
 .selected-btn:hover {
-    font-weight: bold;
+    background-color: var(--brand-color);
+}
+.selected-btn:disabled {
+    background-color: #ddd;
+    color: #888;
+    cursor: not-allowed;
 }
 
 .order-btn {

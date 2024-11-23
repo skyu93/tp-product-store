@@ -1,21 +1,18 @@
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { CartContext } from '@/provider/context';
+import { ChangeEvent, useMemo } from 'react';
 import styles from './Cart.module.css';
 import CartProduct from '@/pages/cart/CartProduct';
+import { useCartStore } from '@/store/cart';
 
 export default function Cart() {
-  const { cartProducts, selectedCartProducts, selectAll, deselectAll, deleteProductFromCart } = useContext(CartContext);
-  const [isNotOrderable, setOrderable] = useState(true);
+  const { cartProducts, selectAll, deselectAll, deleteProductFromCart } = useCartStore();
+  const selectedCartProducts = useMemo(() => cartProducts.filter((c) => c.selected), [cartProducts]);
 
   const totalPrice = useMemo(() => {
     const price = selectedCartProducts.reduce((price, product) => price + product.price, 0);
     return price.toFixed(2);
   }, [selectedCartProducts]);
 
-  useEffect(() => {
-    setOrderable(selectedCartProducts.length <= 0);
-  }, [selectedCartProducts]);
-
+  const isNotOrderable = useMemo(() => selectedCartProducts.length <= 0, [selectedCartProducts]);
   const handleAllSelect = (evt: ChangeEvent<HTMLInputElement>) => {
     if (evt.target.checked) {
       selectAll();
@@ -33,10 +30,10 @@ export default function Cart() {
       <div className={styles.headerWrap}>
         <label>
           <input type="checkbox" style={{ cursor: 'pointer' }} onChange={handleAllSelect} />
-          <span>전체 선택</span> {isNotOrderable}
+          <span>전체 선택</span>
         </label>
         <div>
-          <button className={styles.selectedBtn} onClick={handleDeleteProduct}>
+          <button className={styles.selectedBtn} disabled={isNotOrderable} onClick={handleDeleteProduct}>
             X 선택 삭제
           </button>
         </div>
