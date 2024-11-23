@@ -4,16 +4,17 @@ import { useContext, useEffect, useState } from 'react';
 import { fetchProductById } from '@/api';
 import { isNill } from '@/utility/typeGuard';
 import { Product } from '@/@types/product.type';
-import { CartContext, ModalContext } from '@/provider/context';
+import { CartContext } from '@/provider/context';
 import Image from '@/components/image/Image';
 import starIcon from '@/assets/icon/star.svg';
 import AddProductModal from '@/pages/product-detail/AddProductModal';
+import { useModelStore } from '@/store/modal';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const { addProductToCart } = useContext(CartContext);
-  const { showModal, closeModal } = useContext(ModalContext);
+  const { showModal, closeModal } = useModelStore();
 
   useEffect(() => {
     const getProduct = async () => {

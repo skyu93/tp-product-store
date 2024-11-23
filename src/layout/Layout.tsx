@@ -3,7 +3,7 @@ import { CartContext } from '@/provider/context';
 import Header from '@/components/header/Header';
 import styles from './Layout.module.css';
 import useCartState from '@/hooks/useCartState';
-import ModalProvider from '@/components/modal/ModalProvider';
+import Modal from '@/components/modal/Modal';
 
 export default function Layout() {
   const {
@@ -18,7 +18,7 @@ export default function Layout() {
   } = useCartState();
 
   return (
-    <ModalProvider>
+    <Modal>
       <CartContext.Provider
         value={{
           cartProducts,
@@ -36,6 +36,6 @@ export default function Layout() {
           <Outlet />
         </main>
       </CartContext.Provider>
-    </ModalProvider>
+    </Modal>
   );
 }

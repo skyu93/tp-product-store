@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 import { Cart } from '@/@types/cart.type';
-import { Modal } from '@/@types/modal.type';
 
 export const CartContext = createContext<Cart>({
   cartProducts: [],
@@ -11,9 +10,4 @@ export const CartContext = createContext<Cart>({
   deselectByProductId: () => {},
   selectAll: () => {},
   deselectAll: () => {},
-});
-export const ModalContext = createContext<Modal>({
-  showModal: () => {},
-  closeModal: () => {},
-  isVisible: false,
 });
