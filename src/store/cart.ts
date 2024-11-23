@@ -1,12 +1,8 @@
 import { create } from 'zustand';
 import { Cart, CartProduct } from '@/@types/cart.type';
 import { Product } from '@/@types/product.type';
-import { isNill, isNotNill } from '@/utility/typeGuard';
+import { isNill } from '@/utility/typeGuard';
 import { LOCAL_STORAGE_CART_KEY } from '@/config/localstrage.config';
-
-const hasProduct = (cartProducts: CartProduct[], product: Product): boolean => {
-  return isNotNill(cartProducts.find((p) => p.id === product.id));
-};
 
 const getCartProductsFromLocalStorage = () => {
   const value = localStorage.getItem(LOCAL_STORAGE_CART_KEY);
@@ -26,10 +22,6 @@ export const useCartStore = create<Cart>((set) => ({
   cartProducts: getCartProductsFromLocalStorage(),
   addProductToCart: (product: Product) =>
     set((state) => {
-      if (hasProduct(state.cartProducts, product)) {
-        return state;
-      }
-
       const cartProducts: CartProduct[] = [
         ...state.cartProducts,
         {
