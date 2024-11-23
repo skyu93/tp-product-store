@@ -1,14 +1,13 @@
 import styles from './Header.module.css';
 import cartIcon from '@/assets/icon/cart.svg';
 import backIcon from '@/assets/icon/back.svg';
-import { useContext } from 'react';
-import { CartContext } from '@/provider/context';
 import { Link, useNavigate } from 'react-router-dom';
 import CountBadge from '@/components/header/CountBadge';
 import SearchBar from '@/components/search/SearchBar';
+import { useCartStore } from '@/store/cart';
 
 export default function Header() {
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts } = useCartStore();
   const navigate = useNavigate();
   const goBack = async () => navigate(-1);
 
