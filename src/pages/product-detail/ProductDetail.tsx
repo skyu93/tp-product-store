@@ -1,8 +1,8 @@
 import styles from './ProductDetail.module.css';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchProductById } from '@/api';
-import { isNill } from '@/utility/typeGuard';
+import { isNill, isNotNill } from '@/utility/typeGuard';
 import { Product } from '@/@types/product.type';
 import Image from '@/components/image/Image';
 import starIcon from '@/assets/icon/star.svg';
@@ -13,8 +13,15 @@ import { useCartStore } from '@/store/cart';
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-  const { addProductToCart } = useCartStore();
+  const { cartProducts, addProductToCart } = useCartStore();
   const { showModal, closeModal } = useModelStore();
+
+  const hasProduct = useCallback(
+    (product: Product): boolean => {
+      return isNotNill(cartProducts.find((p) => p.id === product.id));
+    },
+    [cartProducts],
+  );
 
   useEffect(() => {
     const getProduct = async () => {
@@ -27,7 +34,7 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddCart = () => {
-    if (isNill(product)) {
+    if (isNill(product) || hasProduct(product)) {
       return;
     }
     addProductToCart(product);
