@@ -2,7 +2,7 @@ import styles from './Modal.module.css';
 import { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { PORTAL_ELEMENT_ID } from '@/@types/modal.type';
-import { useModelStore } from '@/store/modal';
+import { useModal } from '@/hooks/useModal';
 
 type Props = {
   children: ReactNode;
@@ -10,7 +10,7 @@ type Props = {
 
 export default function Modal({ children }: Props) {
   const portalEl = useRef<HTMLElement | null>(null);
-  const modalEl = useModelStore((state) => state.element);
+  const modalEl = useModal((state) => state.element);
   useEffect(() => {
     portalEl.current = document.getElementById(PORTAL_ELEMENT_ID);
   }, []);

@@ -7,14 +7,14 @@ import { Product } from '@/@types/product.type';
 import Image from '@/components/image/Image';
 import starIcon from '@/assets/icon/star.svg';
 import AddProductModal from '@/pages/product-detail/AddProductModal';
-import { useModelStore } from '@/store/modal';
-import { useCartStore } from '@/store/cart';
+import { useModal } from '@/hooks/useModal';
+import { useCart } from '@/hooks/useCart';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-  const { cartProducts, addProductToCart } = useCartStore();
-  const { showModal, closeModal } = useModelStore();
+  const { cartProducts, addProductToCart } = useCart();
+  const { showModal, closeModal } = useModal();
 
   const hasProduct = useCallback(
     (product: Product): boolean => {

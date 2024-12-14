@@ -5,11 +5,11 @@ import VirtualizedList from '@/components/virtualized-list/VirtualizedList';
 import useProductState from '@/hooks/useProductState';
 import { Product } from '@/@types/product.type';
 import { getResponsiveColumnWidth, throttle } from '@/utility';
-import { useSearchStore } from '@/store/search';
+import { useSearch } from '@/hooks/useSearch';
 
 export default function Products() {
   const { products, nextPage, setPage, searchProducts } = useProductState();
-  const { searchText } = useSearchStore();
+  const { searchText } = useSearch();
   const virtualizedListRef = useRef<HTMLDivElement>(null);
   const [itemWidth, setItemWidth] = useState(300);
   const isProductEmpty = () => {
