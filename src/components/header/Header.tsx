@@ -4,10 +4,10 @@ import backIcon from '@/assets/icon/back.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import CountBadge from '@/components/header/CountBadge';
 import SearchBar from '@/components/search/SearchBar';
-import { useCartStore } from '@/store/cart';
+import { useCart } from '@/hooks/useCart';
 
 export default function Header() {
-  const { cartProducts } = useCartStore();
+  const { cartProducts } = useCart();
   const navigate = useNavigate();
   const goBack = async () => navigate(-1);
 

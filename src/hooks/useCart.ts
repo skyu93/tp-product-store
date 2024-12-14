@@ -18,7 +18,7 @@ const setCartProducts = (cartProducts: CartProduct[]) => {
   return { cartProducts };
 };
 
-export const useCartStore = create<Cart>((set) => ({
+export const useCart = create<Cart>((set) => ({
   cartProducts: getCartProductsFromLocalStorage(),
   addProductToCart: (product: Product) =>
     set((state) => {

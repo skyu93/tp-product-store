@@ -3,11 +3,11 @@ import searchIcon from '@/assets/icon/search.svg';
 import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { debounce } from '@/utility';
 import { isNill } from '@/utility/typeGuard';
-import { useSearchStore } from '@/store/search';
+import { useSearch } from '@/hooks/useSearch';
 import { useLocation } from 'react-router-dom';
 
 export default function SearchBar() {
-  const setSearchText = useSearchStore((state) => state.setSearchText);
+  const setSearchText = useSearch((state) => state.setSearchText);
   const location = useLocation();
   const handleInputChange = useCallback(
     debounce((event?: ChangeEvent<HTMLInputElement>) => {

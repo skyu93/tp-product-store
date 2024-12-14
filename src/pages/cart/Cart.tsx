@@ -1,10 +1,10 @@
 import { ChangeEvent, useMemo } from 'react';
 import styles from './Cart.module.css';
 import CartProduct from '@/pages/cart/CartProduct';
-import { useCartStore } from '@/store/cart';
+import { useCart } from '@/hooks/useCart';
 
 export default function Cart() {
-  const { cartProducts, selectAll, deselectAll, deleteProductFromCart } = useCartStore();
+  const { cartProducts, selectAll, deselectAll, deleteProductFromCart } = useCart();
   const selectedCartProducts = useMemo(() => cartProducts.filter((c) => c.selected), [cartProducts]);
 
   const totalPrice = useMemo(() => {
