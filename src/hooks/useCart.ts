@@ -1,81 +1,64 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Cart, CartProduct } from '@/@types/cart.type';
 import { Product } from '@/@types/product.type';
-import { isNill } from '@/utility/typeGuard';
 import { LOCAL_STORAGE_CART_KEY } from '@/config/localstrage.config';
 
-const getCartProductsFromLocalStorage = () => {
-  const value = localStorage.getItem(LOCAL_STORAGE_CART_KEY);
-  return value ? JSON.parse(value) : [];
-};
-const saveCartProductsToLocalStorage = (newCartProducts: CartProduct[]) => {
-  if (isNill(newCartProducts)) return;
-  localStorage.setItem(LOCAL_STORAGE_CART_KEY, JSON.stringify(newCartProducts));
-};
-
-const setCartProducts = (cartProducts: CartProduct[]) => {
-  saveCartProductsToLocalStorage(cartProducts);
-  return { cartProducts };
-};
-
-export const useCart = create<Cart>((set) => ({
-  cartProducts: getCartProductsFromLocalStorage(),
-  addProductToCart: (product: Product) =>
-    set((state) => {
-      const cartProducts: CartProduct[] = [
-        ...state.cartProducts,
-        {
-          id: product.id,
-          title: product.title,
-          thumbnail: product.thumbnail,
-          price: product.price,
-          brand: product.brand,
-          selected: false,
-        },
-      ];
-      return setCartProducts(cartProducts);
+export const useCart = create<Cart>()(
+  persist(
+    (set) => ({
+      cartProducts: [],
+      addProductToCart: (product: Product) =>
+        set((state) => {
+          const newCartProduct: CartProduct = {
+            id: product.id,
+            title: product.title,
+            thumbnail: product.thumbnail,
+            price: product.price,
+            brand: product.brand,
+            selected: false,
+          };
+          const cartProducts = [...state.cartProducts, newCartProduct];
+          return { cartProducts };
+        }),
+      deleteProductFromCart: (productIds: string[]) =>
+        set((state) => {
+          const cartProducts = state.cartProducts.filter((product) => !productIds.includes(product.id));
+          return { cartProducts };
+        }),
+      selectByProductId: (id: string) =>
+        set((state) => {
+          const cartProducts = state.cartProducts.map((product) =>
+            product.id === id ? { ...product, selected: true } : product,
+          );
+          return { cartProducts };
+        }),
+      deselectByProductId: (id: string) =>
+        set((state) => {
+          const cartProducts = state.cartProducts.map((product) =>
+            product.id === id ? { ...product, selected: false } : product,
+          );
+          return { cartProducts };
+        }),
+      selectAll: () =>
+        set((state) => {
+          const cartProducts = state.cartProducts.map((product) => ({
+            ...product,
+            selected: true,
+          }));
+          return { cartProducts };
+        }),
+      deselectAll: () =>
+        set((state) => {
+          const cartProducts = state.cartProducts.map((product) => ({
+            ...product,
+            selected: false,
+          }));
+          return { cartProducts };
+        }),
     }),
-  deleteProductFromCart: (productIds: string[]) =>
-    set((state) => {
-      const filteredCartProducts = state.cartProducts.filter((p) => !productIds.includes(p.id));
-
-      return setCartProducts(filteredCartProducts);
-    }),
-  selectByProductId: (id: string) =>
-    set((state) => {
-      const cartProducts = state.cartProducts.map((c) => {
-        if (c.id === id) {
-          c.selected = true;
-        }
-        return c;
-      });
-
-      return setCartProducts(cartProducts);
-    }),
-  deselectByProductId: (id: string) =>
-    set((state) => {
-      const cartProducts = state.cartProducts.map((c) => {
-        if (c.id === id) {
-          c.selected = false;
-        }
-        return c;
-      });
-      return setCartProducts(cartProducts);
-    }),
-  selectAll: () =>
-    set((state) => {
-      const cartProducts = state.cartProducts.map((c) => {
-        c.selected = true;
-        return c;
-      });
-      return setCartProducts(cartProducts);
-    }),
-  deselectAll: () =>
-    set((state) => {
-      const cartProducts = state.cartProducts.map((c) => {
-        c.selected = false;
-        return c;
-      });
-      return setCartProducts(cartProducts);
-    }),
-}));
+    {
+      name: LOCAL_STORAGE_CART_KEY, // 로컬 스토리지 키
+    },
+  ),
+);
