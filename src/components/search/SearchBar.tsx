@@ -30,6 +30,7 @@ export default function SearchBar() {
   return (
     <div className={styles.searchContainer}>
       <input
+        data-testid="input-search-bar"
         className={styles.searchInput}
         type="text"
         placeholder="검색어를 입력하세요"

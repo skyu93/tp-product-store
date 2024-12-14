@@ -9,5 +9,9 @@ export default function CountBadge({ count }: Props) {
     return <div className={styles.badge}>99+</div>;
   }
 
-  return <div className={styles.badge}>{count}</div>;
+  return (
+    <div data-testid="count-badge" className={styles.badge}>
+      {count}
+    </div>
+  );
 }

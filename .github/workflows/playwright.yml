@@ -1,0 +1,69 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 리포지토리 체크아웃
+      - uses: actions/checkout@v4
+
+      # 2. Node.js 환경 설정
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # 3. 의존성 설치
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+
+      # 4. Playwright 브라우저 설치
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      # 5. Playwright 테스트 실행
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+
+      # 6. Playwright 테스트 결과 업로드
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      # 추가 기능 1. 캐시를 사용해 설치 시간 최적화
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store # pnpm의 의존성 저장소 경로
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      # 추가 기능 3. 테스트 실패 시 PR에 코멘트 남기기
+      - name: Create comment on PR if tests fail
+        uses: actions/github-script@v6
+        if: failure() && github.event_name == 'pull_request'
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: "테스트가 실패했습니다. Playwright 리포트를 확인하세요. 🚨"
+            })
+
+      # 추가 기능 4. 성공한 단계 캐시 저장
+      - name: Post-run cleanup
+        if: always()
+        run: |
+          echo "All steps executed, saving cache state."

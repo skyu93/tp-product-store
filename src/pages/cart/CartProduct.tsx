@@ -20,7 +20,7 @@ export default function CartProduct({ product }: Props) {
   };
 
   return (
-    <div className={styles.container}>
+    <div data-testid="cart-item" className={styles.container}>
       <input className={styles.checkBox} type="checkbox" checked={selected} onChange={handleChange} />
       <Image className={styles.image} width={100} src={thumbnail} alt={title} />
       <div className={styles.info}>

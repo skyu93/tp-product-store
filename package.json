@@ -9,7 +9,9 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "start": "vite",
-    "build": "tsc -b && vite build"
+    "build": "tsc -b && vite build",
+    "e2e:test": "npx playwright test",
+    "e2e:ui": "npx playwright --ui"
   },
   "author": "",
   "license": "MIT",
@@ -20,6 +22,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@types/css-modules": "^1.0.5",
     "@types/node": "^22.8.2",
     "@types/react": "^18.3.12",

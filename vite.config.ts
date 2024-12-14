@@ -5,6 +5,7 @@ import * as path from 'node:path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: './',
   css: {
     modules: {
       // CSS module 설정 (styles.cssPropery)
